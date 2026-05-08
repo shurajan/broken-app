@@ -113,3 +113,24 @@ note: test exited abnormally; to see the full output pass --no-capture to the ha
 
 
 ## Исправление логики
+###### sum_even
+Исправлена ошибка выхода за границы среза и убран ненужный unsafe блок
+Добавлены тесты:
+* test sum_even_all_evens ... ok
+* test sum_even_empty_slice ... ok
+* test sum_even_negative_evens ... ok
+* test sum_even_no_evens ... ok
+
+###### average_positive
+Исправлена логика и добавлены тесты:
+* test average_positive_empty ... ok
+* test average_positive_single_element ... ok
+* test average_positive_no_positives ... ok
+
+###### normalize
+Исправлено логика и добавлены тесты:
+* test normalize_empty ... ok
+* test normalize_no_whitespace ... ok
+* test normalize_multiple_spaces ... ok
+* test normalize_tabs_and_newlines ... ok
+

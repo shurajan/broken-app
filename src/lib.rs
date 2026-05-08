@@ -1,20 +1,8 @@
 pub mod algo;
 pub mod concurrency;
 
-/// Сумма чётных значений.
-/// Здесь намеренно используется `get_unchecked` с off-by-one,
-/// из-за чего возникает UB при доступе за пределы среза.
 pub fn sum_even(values: &[i64]) -> i64 {
-    let mut acc = 0;
-    unsafe {
-        for idx in 0..=values.len() {
-            let v = *values.get_unchecked(idx);
-            if v % 2 == 0 {
-                acc += v;
-            }
-        }
-    }
-    acc
+    values.iter().copied().filter(|&v| v % 2 == 0).sum()
 }
 
 /// Подсчёт ненулевых байтов. Буфер намеренно не освобождается,
@@ -36,20 +24,15 @@ pub fn leak_buffer(input: &[u8]) -> usize {
     count
 }
 
-/// Небрежная нормализация строки: удаляем пробелы и приводим к нижнему регистру,
-/// но игнорируем повторяющиеся пробелы/табуляции внутри текста.
 pub fn normalize(input: &str) -> String {
-    input.replace(' ', "").to_lowercase()
+    input.chars().filter(|c| !c.is_whitespace()).collect::<String>().to_lowercase()
 }
 
-/// Логическая ошибка: усредняет по всем элементам, хотя требуется учитывать
-/// только положительные. Деление на длину среза даёт неверный результат.
 pub fn average_positive(values: &[i64]) -> f64 {
-    let sum: i64 = values.iter().sum();
-    if values.is_empty() {
-        return 0.0;
-    }
-    sum as f64 / values.len() as f64
+    let (sum, count) = values.iter()
+        .filter(|&&v| v > 0)
+        .fold((0i64, 0usize), |(s, n), &v| (s + v, n + 1));
+    if count == 0 { 0.0 } else { sum as f64 / count as f64 }
 }
 
 /// Use-after-free: возвращает значение после освобождения бокса.
