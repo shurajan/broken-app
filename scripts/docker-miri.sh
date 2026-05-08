@@ -4,4 +4,5 @@ set -euo pipefail
 source "$(dirname "$0")/docker-common.sh"
 
 ensure_container
+echo "==> cargo +nightly miri test $*"
 docker exec -it "$CONTAINER" cargo +nightly miri test "$@"

@@ -107,3 +107,9 @@ Caused by:
 process didn't exit successfully: `/usr/local/rustup/toolchains/nightly-aarch64-unknown-linux-gnu/bin/cargo-miri runner /app/target/miri/aarch64-unknown-linux-gnu/debug/deps/integration-8b18f0d975fb3dac` (exit status: 1)
 note: test exited abnormally; to see the full output pass --no-capture to the harness.
 ```
+
+###### Результат запуска valgrind, ASan, TSan тестов до модификации
+тесты не проходят
+
+
+## Исправление логики
