@@ -1,4 +1,4 @@
-use broken_app::{algo, leak_buffer, normalize, sum_even, use_after_free};
+use broken_app::{algo, concurrency, leak_buffer, normalize, sum_even, use_after_free};
 
 #[test]
 fn sums_even_numbers() {
@@ -36,13 +36,6 @@ fn counts_non_zero_bytes() {
     let data = [0_u8, 1, 0, 2, 3];
     assert_eq!(leak_buffer(&data), 3);
 }
-
-// #[test]
-// fn leak_buffer_valgrind() {
-//     let data: Vec<u8> = (0_u8..=255).cycle().take(1024 * 1024).collect();
-//     let non_zero = leak_buffer(&data);
-//     assert_eq!(non_zero, data.iter().filter(|&&b| b != 0).count());
-// }
 
 #[test]
 fn dedup_preserves_uniques() {
@@ -110,4 +103,25 @@ fn average_positive_single_element() {
 #[test]
 fn use_after_free_test() {
     assert_eq!(use_after_free(), 84);
+}
+
+// --- concurrency tests (intentional data races — TSan triggers) ---
+
+#[test]
+fn race_increment_data_race() {
+    let _ = concurrency::race_increment(100, 4);
+}
+
+#[test]
+fn read_after_sleep_stale_read() {
+    concurrency::race_increment(50, 2);
+    let _ = concurrency::read_after_sleep();
+}
+
+#[test]
+fn reset_counter_races_with_increment() {
+    use std::thread;
+    let h = thread::spawn(|| concurrency::race_increment(500, 4));
+    concurrency::reset_counter();
+    let _ = h.join();
 }
