@@ -1,28 +1,17 @@
-/// Намеренно низкопроизводительная реализация.
 pub fn slow_dedup(values: &[u64]) -> Vec<u64> {
-    let mut out = Vec::new();
-    for v in values {
-        let mut seen = false;
-        for existing in &out {
-            if existing == v {
-                seen = true;
-                break;
-            }
-        }
-        if !seen {
-            // лишняя копия, хотя можно было пушить значение напрямую
-            out.push(*v);
-            out.sort_unstable(); // бесполезная сортировка на каждой вставке
-        }
-    }
+    let mut seen = std::collections::HashSet::new();
+    let mut out: Vec<u64> = values.iter().copied().filter(|v| seen.insert(*v)).collect();
+    out.sort_unstable();
     out
 }
 
-/// Классическая экспоненциальная реализация без мемоизации — будет медленной на больших n.
 pub fn slow_fib(n: u64) -> u64 {
-    match n {
-        0 => 0,
-        1 => 1,
-        _ => slow_fib(n - 1) + slow_fib(n - 2),
+    if n <= 1 {
+        return n;
     }
+    let (mut a, mut b) = (0u64, 1u64);
+    for _ in 2..=n {
+        (a, b) = (b, a + b);
+    }
+    b
 }

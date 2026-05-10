@@ -1,5 +1,6 @@
 use broken_app::{algo, sum_even};
 use criterion::{BatchSize, Criterion, criterion_group, criterion_main};
+use std::path::Path;
 
 fn bench_sum_even(c: &mut Criterion) {
     let data: Vec<i64> = (0..50_000).collect();
@@ -23,5 +24,13 @@ fn bench_dedup(c: &mut Criterion) {
     });
 }
 
-criterion_group!(benches, bench_sum_even, bench_fib, bench_dedup);
+fn criterion_config() -> Criterion {
+    Criterion::default().output_directory(Path::new("artifacts/criterion"))
+}
+
+criterion_group! {
+    name = benches;
+    config = criterion_config();
+    targets = bench_sum_even, bench_fib, bench_dedup
+}
 criterion_main!(benches);

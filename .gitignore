@@ -32,3 +32,6 @@ test_*.csv
 test_*.txt
 test_*.bin
 test_*.png
+
+perf.data
+perf.data.old

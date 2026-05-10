@@ -1,18 +1,19 @@
 use broken_app::{algo, leak_buffer, normalize, sum_even};
 
 fn main() {
-    let nums = [1, 2, 3, 4];
-    println!("sum_even: {}", sum_even(&nums));
+    let nums: Vec<i64> = (0..500_000).collect();
+    let dedup_data: Vec<u64> = (0..1_000).flat_map(|n| [n, n]).collect();
 
-    let data = [1_u8, 0, 2, 3];
-    println!("non-zero bytes: {}", leak_buffer(&data));
+    for _ in 0..10_000 {
+        std::hint::black_box(sum_even(&nums));
+    }
 
-    let text = " Hello World ";
-    println!("normalize: {}", normalize(text));
+    std::hint::black_box(algo::slow_fib(43));
 
-    let fib = algo::slow_fib(20);
-    println!("fib(20): {}", fib);
+    for _ in 0..10_000 {
+        std::hint::black_box(algo::slow_dedup(&dedup_data));
+    }
 
-    let uniq = algo::slow_dedup(&[1, 2, 2, 3, 1, 4, 4]);
-    println!("dedup: {:?}", uniq);
+    println!("non-zero: {}", leak_buffer(&[1_u8, 0, 2, 3]));
+    println!("normalize: {}", normalize(" Hello World "));
 }

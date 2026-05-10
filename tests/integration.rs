@@ -107,7 +107,6 @@ fn average_positive_single_element() {
     assert!((broken_app::average_positive(&[7]) - 7.0).abs() < f64::EPSILON);
 }
 
-
 #[test]
 fn use_after_free_test() {
     assert_eq!(use_after_free(), 84);

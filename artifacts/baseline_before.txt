@@ -1,0 +1,12 @@
+   Compiling broken-app v0.1.0 (/Users/sasha/RustroverProjects/broken-app)
+    Finished `bench` profile [optimized] target(s) in 0.13s
+     Running benches/baseline.rs (target/release/deps/baseline-e9f39be58e71f0da)
+sum_even: 41ns
+slow_fib: 8.978792ms
+slow_dedup: 11.769333ms
+sum_even: 0ns
+slow_fib: 6.440458ms
+slow_dedup: 8.572667ms
+sum_even: 42ns
+slow_fib: 5.594167ms
+slow_dedup: 7.536583ms
